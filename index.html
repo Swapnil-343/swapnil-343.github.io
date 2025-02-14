@@ -1,142 +1,140 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <!-- <meta http-equiv="X-UA-Compatible" content="IE=edge" /> -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Play Unique</title>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SwapGPT</title>
     <style>
-     @import 'https://fonts.googleapis.com/css?family=Inconsolata';
-html {
-  min-height: 100%;
-}
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
 
-body {
-  box-sizing: border-box;
-  height: 100%;
-  background-color: #000000;
-  background-image: radial-gradient(#11581E, #041607), url("https://media.giphy.com/media/oEI9uBYSzLpBK/giphy.gif");
-  background-repeat: no-repeat;
-  background-size: cover;
-  font-family: "Inconsolata", Helvetica, sans-serif;
-  font-size: 1.5rem;
-  color: rgba(128, 255, 128, 0.8);
-  text-shadow: 0 0 1ex #33ff33, 0 0 2px rgba(255, 255, 255, 0.8);
-}
+        .header {
+            background-color: #4CAF50;
+            color: white;
+            text-align: center;
+            padding: 15px;
+            font-size: 20px;
+            font-weight: bold;
+            border-radius: 8px 8px 0 0;
+        }
 
-.noise {
-  pointer-events: none;
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  background-image: url("https://media.giphy.com/media/oEI9uBYSzLpBK/giphy.gif");
-  background-repeat: no-repeat;
-  background-size: cover;
-  z-index: -1;
-  opacity: 0.02;
-}
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
 
-.overlay {
-  pointer-events: none;
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  background: repeating-linear-gradient(180deg, rgba(0, 0, 0, 0) 0, rgba(0, 0, 0, 0.3) 50%, rgba(0, 0, 0, 0) 100%);
-  background-size: auto 4px;
-  z-index: 1;
-}
+        .chat-box {
+            height: 400px;
+            overflow-y: scroll;
+            margin-bottom: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background-color: #fafafa;
+        }
 
-.overlay::before {
-  content: "";
-  pointer-events: none;
-  position: absolute;
-  display: block;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  width: 100%;
-  height: 100%;
-  background-image: linear-gradient(0deg, transparent 0%, rgba(32, 128, 32, 0.2) 2%, rgba(32, 128, 32, 0.8) 3%, rgba(32, 128, 32, 0.2) 3%, transparent 100%);
-  background-repeat: no-repeat;
-  -webkit-animation: scan 7.5s linear 0s infinite;
-          animation: scan 7.5s linear 0s infinite;
-}
+        .input-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
 
-@-webkit-keyframes scan {
-  0% {
-    background-position: 0 -100vh;
-  }
-  35%, 100% {
-    background-position: 0 100vh;
-  }
-}
+        textarea {
+            width: 80%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            resize: none;
+            height: 50px;
+        }
 
-@keyframes scan {
-  0% {
-    background-position: 0 -100vh;
-  }
-  35%, 100% {
-    background-position: 0 100vh;
-  }
-}
-.terminal {
-  box-sizing: inherit;
-  position: absolute;
-  height: 100%;
-  width: 1000px;
-  max-width: 100%;
-  padding: 4rem;
-  text-transform: uppercase;
-}
+        button {
+            padding: 10px 20px;
+            border: none;
+            background-color: #4CAF50;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
 
-.output {
-  color: rgba(128, 255, 128, 0.8);
-  text-shadow: 0 0 1px rgba(51, 255, 51, 0.4), 0 0 2px rgba(255, 255, 255, 0.8);
-}
+        button:hover {
+            background-color: #45a049;
+        }
 
-.output::before {
-  content: "> ";
-}
+        .message {
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 5px;
+        }
 
-/*
-.input {
-  color: rgba(192, 255, 192, 0.8);
-  text-shadow:
-      0 0 1px rgba(51, 255, 51, 0.4),
-      0 0 2px rgba(255, 255, 255, 0.8);
-}
+        .user {
+            background-color: #f1f1f1;
+            align-self: flex-end;
+            max-width: 70%;
+            margin-left: auto;
+        }
 
-.input::before {
-  content: "$ ";
-}
-*/
-a {
-  color: #fff;
-  text-decoration: none;
-}
+        .ai {
+            background-color: #d1f7c4;
+            max-width: 70%;
+        }
 
-a::before {
-  content: "[";
-}
-
-a::after {
-  content: "]";
-}
-
-.errorcode {
-  color: white;
-}
+        .error {
+            background-color: #f7d1d1;
+        }
     </style>
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9160497360186570"
-     crossorigin="anonymous"></script>
-  </head>
-  <body>
-    <div class="noise"></div>
-<div class="overlay"></div>
-<div class="terminal">
-  <h1>Under<span class="errorcode"> Maintenance
-  </span></h1>
-</div>
-  </body>
+</head>
+<body>
+    <!-- Header section with SwapGPT message -->
+    <div class="header">
+        SwapGPT: What can I help with?
+    </div>
+
+    <div class="container">
+        <div class="chat-box" id="chat-box"></div>
+        
+        <div class="input-container">
+            <textarea id="user-input" placeholder="Enter your prompt..."></textarea>
+            <button onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+
+    <script>
+        function sendMessage() {
+            let userInput = document.getElementById('user-input').value;
+            if (userInput.trim() === "") return;
+
+            // Add user message to chat box
+            let chatBox = document.getElementById('chat-box');
+            chatBox.innerHTML += `<div class="message user">${userInput}</div>`;
+            document.getElementById('user-input').value = "";
+
+            // Send the prompt to the backend
+            fetch('/generate', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `prompt=${encodeURIComponent(userInput)}`
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.response) {
+                    chatBox.innerHTML += `<div class="message ai">${data.response}</div>`;
+                } else {
+                    chatBox.innerHTML += `<div class="message error">Error: ${data.error}</div>`;
+                }
+            });
+        }
+    </script>
+</body>
 </html>
